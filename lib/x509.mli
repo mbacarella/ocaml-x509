@@ -1001,8 +1001,11 @@ module Authenticator : sig
       {{:https://tools.ietf.org/html/rfc5280#section-6.1}RFC 5280}, using
       {!Validation.verify_chain_of_trust}.  The given trust anchors are not
       validated, you can filter them with {!Validation.valid_cas} if desired. *)
-  val chain_of_trust : time:(unit -> Ptime.t option) -> ?crls:CRL.t list ->
+  val chain_of_trust_ex : time:(unit -> Ptime.t option) -> ?crls:CRL.t list ->
     ?allow_ca_cert:bool -> ?allowed_hashes:Mirage_crypto.Hash.hash list -> Certificate.t list -> t
+  val chain_of_trust : time:(unit -> Ptime.t option) -> ?crls:CRL.t list ->
+    ?allowed_hashes:Mirage_crypto.Hash.hash list -> Certificate.t list -> t
+
 
   (** [server_key_fingerprint ~time hash fingerprint] is an [authenticator]
       that uses the given [time] and [fingerprint] to verify that the
