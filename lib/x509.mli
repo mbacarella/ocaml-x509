@@ -690,6 +690,7 @@ module Validation : sig
   val verify_chain : ?ip:Ipaddr.t -> host:[`host] Domain_name.t option ->
     time:(unit -> Ptime.t option) ->
     ?revoked:(issuer:Certificate.t -> cert:Certificate.t -> bool) ->
+    ?allow_ca_cert:bool ->
     ?allowed_hashes:Mirage_crypto.Hash.hash list ->
     anchors:(Certificate.t list) -> Certificate.t list ->
     (Certificate.t, [> chain_error ]) result
@@ -726,6 +727,7 @@ module Validation : sig
     ?ip:Ipaddr.t -> host:[`host] Domain_name.t option ->
     time:(unit -> Ptime.t option) ->
     ?revoked:(issuer:Certificate.t -> cert:Certificate.t -> bool) ->
+    ?allow_ca_cert:bool ->
     ?allowed_hashes:Mirage_crypto.Hash.hash list ->
     anchors:(Certificate.t list) -> Certificate.t list -> r
 
@@ -1000,7 +1002,7 @@ module Authenticator : sig
       {!Validation.verify_chain_of_trust}.  The given trust anchors are not
       validated, you can filter them with {!Validation.valid_cas} if desired. *)
   val chain_of_trust : time:(unit -> Ptime.t option) -> ?crls:CRL.t list ->
-    ?allowed_hashes:Mirage_crypto.Hash.hash list -> Certificate.t list -> t
+    ?allow_ca_cert:bool -> ?allowed_hashes:Mirage_crypto.Hash.hash list -> Certificate.t list -> t
 
   (** [server_key_fingerprint ~time hash fingerprint] is an [authenticator]
       that uses the given [time] and [fingerprint] to verify that the
